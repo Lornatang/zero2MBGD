@@ -1,5 +1,5 @@
 from sklearn.linear_model import LinearRegression
-from ops import compute_grad_bgd, update_beta, loss
+from ops import compute_grad_mbgd, update_beta, loss
 
 import pandas as pd
 import numpy as np
@@ -13,6 +13,7 @@ submit = pd.read_csv('data/sample_submit.csv')
 beta = [1, 1]
 lr = 0.2
 tol_L = 0.1
+batch_size = 16
 
 # normalizes x
 max_x = max(train['id'])
@@ -21,7 +22,7 @@ y = train['questions']
 
 # do the first calculation
 np.random.seed(10)
-grad = compute_grad_bgd(beta, x, y)
+grad = compute_grad_mbgd(beta, batch_size, x, y)
 losses = loss(beta, x, y)
 beta = update_beta(beta, lr, grad)
 new_losses = loss(beta, x, y)
@@ -29,7 +30,7 @@ new_losses = loss(beta, x, y)
 i = 1
 while np.abs(new_losses - losses) > tol_L:
   beta = update_beta(beta, lr, grad)
-  grad = compute_grad_bgd(beta, x, y)
+  grad = compute_grad_mbgd(beta, batch_size, x, y)
   losses = new_losses
   new_losses = loss(beta, x, y)
   i += 1
