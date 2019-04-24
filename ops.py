@@ -4,21 +4,24 @@
 import numpy as np
 
 
-def compute_grad_bgd(beta, x, y):
+def compute_grad_mbgd(beta, batch_size, x, y):
   """define a function that computes the gradient
   Parameters
   ------------
-  beta: initial point
-  x:    real data
-  y:    real data label
+  beta:       initial point
+  batch_size: every train dataset
+  x:          real data
+  y:          real data label
 
   Return
   ------------
   array
+
   """
   grad = [0, 0]
-  grad[0] = 2. * np.mean(beta[0] + beta[1] * x - y)
-  grad[1] = 2. * np.mean(x * (beta[0] + beta[1] * x - y))
+  r = np.random.choice(range(len(x)), batch_size, replace=False)
+  grad[0] = 2. * np.mean(beta[0] + beta[1] * x[r] - y[r])
+  grad[1] = 2. * np.mean(x[r] * (beta[0] + beta[1] * x[r] - y[r]))
 
   return np.array(grad)
 
