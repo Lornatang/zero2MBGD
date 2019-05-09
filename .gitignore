@@ -115,3 +115,4 @@ dmypy.json
 
 # my file
 .idea/
+.DS_Store
